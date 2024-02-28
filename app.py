@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 from chains import map_reduce_chain
 from loader import document_loader
 from headers import headers
@@ -15,7 +14,7 @@ def main():
     url = st.text_input("Enter an email address:")
 
     # Button to trigger the processing
-    if st.button("Process"):
+    if st.button("Summarise"):
         with st.spinner("Checking website..."):
             documents = document_loader(url, headers)
 

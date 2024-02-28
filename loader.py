@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup as Soup
 def document_loader(url, headers):
     #load documents
     loader = RecursiveUrlLoader(
-        url=url, max_depth=0, headers=headers, extractor=lambda x: Soup(x, "html.parser").text
+        url=url, max_depth=1, headers=headers, extractor=lambda x: Soup(x, "html.parser").text
     )
     docs = loader.load()
 
