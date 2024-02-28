@@ -1,7 +1,10 @@
+from langchain.chains.combine_documents.stuff import StuffDocumentsChain
+from langchain.chains.llm import LLMChain
+from langchain.prompts import PromptTemplate
+from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
 
 
-
-def map_reduce_chain(map_template, reduce_template, documents, llm)
+def map_reduce_chain(map_template, reduce_template, documents, llm):
     map_prompt = PromptTemplate.from_template(map_template)
     map_chain = LLMChain(llm=llm, prompt=map_prompt)
 
