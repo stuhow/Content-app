@@ -1,1 +1,6 @@
 langchain-openai
+streamlit_feedback
+tiktoken
+langchain-community
+streamlit-feedback
+beautifulsoup4
