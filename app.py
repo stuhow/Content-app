@@ -27,6 +27,7 @@ def main():
 
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", openai_api_key=st.secrets["OPENAI_API_KEY"])
 
+
     # Input
     url = st.text_input("Enter the hotel website address:")
 
@@ -55,7 +56,6 @@ def main():
     feedback_option = ("thumbs")
 
     if st.session_state.run_id:
-        st.write("Save a copy of your summary before providing your feedback below.")
         feedback = streamlit_feedback(
             feedback_type=feedback_option,
             optional_text_label="Please provide an explanation",
