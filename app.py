@@ -17,7 +17,7 @@ os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN_PROJECT"]
 client = Client()
 
 def main():
-    st.title("Web content app")
+    st.title("Hotel content app")
 
     # Initialize session state if it doesn't exist
     if "text_summary" not in st.session_state:
@@ -28,7 +28,7 @@ def main():
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", openai_api_key=st.secrets["OPENAI_API_KEY"])
 
     # Input
-    url = st.text_input("Enter an email address:")
+    url = st.text_input("Enter the hotel website address:")
 
     # Button to trigger the processing
     if st.button("Summarise"):
@@ -45,59 +45,57 @@ def main():
                     #store as session states
                     st.session_state.text_summary = text_summary
                     st.session_state.run_id = run_id
-
-            # Display the result if run_id is not None
-            if st.session_state.run_id is not None:
-                st.write(st.session_state.text_summary)
-            # st.code(text_summary, language="python")
-
-
-            feedback_option = ("thumbs")
-
-            if run_id:
-                st.write("Save a copy of your summary before providing your feedback below.")
-                feedback = streamlit_feedback(
-                    feedback_type=feedback_option,
-                    optional_text_label="Please provide an explanation",
-                    key=f"feedback_{run_id}",
-                )
-
-                # Define score mappings for both "thumbs" and "faces" feedback systems
-                score_mappings = {
-                    "thumbs": {"👍": 1, "👎": 0},
-                    "faces": {"😀": 1, "🙂": 0.75, "😐": 0.5, "🙁": 0.25, "😞": 0},
-                }
-
-                # Get the score mapping based on the selected feedback option
-                scores = score_mappings[feedback_option]
-
-                if feedback:
-                    # Get the score from the selected feedback option's score mapping
-                    score = scores.get(feedback["score"])
-
-                    if score is not None:
-                        # Formulate feedback type string incorporating the feedback option
-                        # and score value
-                        feedback_type_str = f"{feedback_option} {feedback['score']}"
-
-                        # Record the feedback with the formulated feedback type string
-                        # and optional comment
-                        feedback_record = client.create_feedback(
-                            run_id,
-                            feedback_type_str,
-                            score=score,
-                            comment=feedback.get("text"),
-                        )
-                        st.session_state.feedback = {
-                            "feedback_id": str(feedback_record.id),
-                            "score": score,
-                        }
-                        st.write(st.session_state.text_summary)
-                    else:
-                        st.warning("Invalid feedback score.")
-
         else:
             st.write("Something went wrong. Please send the hotel website to Stu.")
+
+    # Display the result if run_id is not None
+    if st.session_state.run_id is not None:
+        st.write(st.session_state.text_summary)
+
+    feedback_option = ("thumbs")
+
+    if st.session_state.run_id:
+        st.write("Save a copy of your summary before providing your feedback below.")
+        feedback = streamlit_feedback(
+            feedback_type=feedback_option,
+            optional_text_label="Please provide an explanation",
+            key=f"feedback_{st.session_state.run_id}",
+        )
+
+        # Define score mappings for both "thumbs" and "faces" feedback systems
+        score_mappings = {
+            "thumbs": {"👍": 1, "👎": 0},
+            "faces": {"😀": 1, "🙂": 0.75, "😐": 0.5, "🙁": 0.25, "😞": 0},
+        }
+
+        # Get the score mapping based on the selected feedback option
+        scores = score_mappings[feedback_option]
+
+        if feedback:
+            # Get the score from the selected feedback option's score mapping
+            score = scores.get(feedback["score"])
+
+            if score is not None:
+                # Formulate feedback type string incorporating the feedback option
+                # and score value
+                feedback_type_str = f"{feedback_option} {feedback['score']}"
+
+                # Record the feedback with the formulated feedback type string
+                # and optional comment
+                feedback_record = client.create_feedback(
+                    st.session_state.run_id,
+                    feedback_type_str,
+                    score=score,
+                    comment=feedback.get("text"),
+                )
+                st.session_state.feedback = {
+                    "feedback_id": str(feedback_record.id),
+                    "score": score,
+                }
+            else:
+                st.warning("Invalid feedback score.")
+
+
 
 
 if __name__ == "__main__":

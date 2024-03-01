@@ -40,6 +40,6 @@ def map_reduce_chain(map_template, reduce_template, documents, llm):
         return_intermediate_steps=False,
     )
 
-    summarized_text = map_reduce_chain.run(documents)
+    summarized_text = map_reduce_chain.invoke(documents)
 
-    return summarized_text
+    return summarized_text['output_text']

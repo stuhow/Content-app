@@ -23,5 +23,4 @@ Take these and distill it into a final summary including each of the main themes
 - Comment on style of property (small B&B, large international hotel, rustic,modern?)
 - Details of facilities (room types, restaurant, gym, spa etc?)
 - Anything else to note?
-
 Helpful Answer:"""
