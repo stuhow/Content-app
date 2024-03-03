@@ -5,3 +5,4 @@ langchain-community
 streamlit-feedback
 beautifulsoup4
 langchain
+langchainhub
