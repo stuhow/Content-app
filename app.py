@@ -2,7 +2,7 @@ import streamlit as st
 from chains import map_reduce_chain
 from loader import document_loader
 from headers import headers
-from prompts import map_template, reduce_template
+from preprocessing import summarisation_preprocessing
 from langchain_openai import ChatOpenAI
 from langchain.callbacks.manager import collect_runs
 from streamlit_feedback import streamlit_feedback
@@ -36,11 +36,14 @@ def main():
         with st.spinner("Checking website..."):
             documents = document_loader(url, headers)
 
-        if len(documents) > 0:
+            summarisation_documents = summarisation_preprocessing(documents)
 
-            with st.spinner(f"Summarising {len(documents)} pages..."):
+
+        if len(summarisation_documents) > 0:
+
+            with st.spinner(f"Summarising {len(summarisation_documents)} pages..."):
                 with collect_runs() as cb:
-                    text_summary = map_reduce_chain(map_template, reduce_template, documents, llm)
+                    text_summary = map_reduce_chain(summarisation_documents, llm)
                     run_id = cb.traced_runs[0].id
 
                     #store as session states
